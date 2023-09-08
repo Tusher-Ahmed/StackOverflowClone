@@ -25,9 +25,11 @@ namespace StackOverflowClone.Controllers
                 if(ModelState.IsValid)
                 {
                     var isValid = session.Query<Client>().Where(b => b.Email == client.Email && b.Password == client.Password).FirstOrDefault();
+                    ;
                     if (isValid != null) {
-                        FormsAuthentication.SetAuthCookie(client.Username, false);
-                        return RedirectToAction("Index", "Home");
+                        var name = isValid.Email;                       
+                        FormsAuthentication.SetAuthCookie(name, false);
+                        return RedirectToAction("Index", "Question");
                     }
                     
                 }                  
@@ -50,10 +52,16 @@ namespace StackOverflowClone.Controllers
                 client.Email = cli.Email;
                 client.Password = cli.Password;
                 client.Username= cli.Username;
-
+                
              
                 using (ISession session = NHibernateSession.OpenSession())
                 {
+                    var present= session.Query<Client>().Where(b => b.Email == client.Email).FirstOrDefault();
+                    if (present != null)
+                    {
+                        ModelState.AddModelError("", "Email is already registered");
+                        return View();
+                    }
                     using (ITransaction transaction = session.BeginTransaction())   
                     {
                         session.Save(client); 
@@ -64,6 +72,7 @@ namespace StackOverflowClone.Controllers
             }
             catch (Exception e)
             {
+                ViewBag.Exception=e.Message;
                 return View();
             }
             
@@ -71,7 +80,8 @@ namespace StackOverflowClone.Controllers
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
-            return RedirectToAction("Login");
+            Session.Abandon();
+            return RedirectToAction("Index","Question");
         }
     }
 }

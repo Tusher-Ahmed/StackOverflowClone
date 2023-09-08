@@ -1,0 +1,76 @@
+﻿@model StackOverflowClone.Models.VM.QueWClient
+@{
+    ViewBag.Title = "Profile";
+}
+
+<div class="row p-4">
+    <div class="col-9">
+        <div class="row">
+            <div class="col-2">
+                <img src="~/Images/profile.jpg" style="width:100%;height:auto" alt="Example Image" />
+            </div>
+            <div class="col-6 p-0">
+                <h1>@Model.Client.Username</h1>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        
+    </div>
+    <div class="col-3 text-end">
+        <a href="@Url.Action("EditProfile", "Account", new { id = Model.Client.Id })" class="btn btn-outline-primary">
+            <i class="bi bi-pencil"></i> Edit Profile
+        </a>      
+    </div>
+</div>
+<div class="row pt-4">
+    <div class="col-3">
+        <div class="pt-4">
+            <h4 class="p-0">Stats</h4>
+            <div class="row" style="border:1px solid #000; padding:5px;border-radius:5px;">
+                <div class="col-6">reputation</div>
+                <div class="col-6">reached</div>
+                <div class="col-6">answers</div>
+                <div class="col-6">questions</div>
+            </div>
+        </div>
+        <div class="pt-4">
+            <h4 class="p-0">Communities</h4>
+            <div class="row"style="border:1px solid #000; padding:5px;border-radius:5px;">
+                <div class="col-6"><img src="~/Images/stack-overflow.png" alt="" style="width:20px;"/> StackOverflow</div>
+                <div class="col-6 text-end">1</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-9 pl-4">
+        <div class="pt-4 pb-4">
+            <h4 class="pl-2">About</h4>
+            <div style="border: 1px solid #000; padding: 5px; border-radius: 5px; background-color: #e1dfdf;">
+                 <div style="padding: 5px; border: 1px solid #000; border-radius: 5px; background-color: #fff;">
+                   <p class="p-2">@Model.Client.AboutMe</p>
+                 </div>
+            </div>
+        </div>
+        <div class="pt-4">
+            <h4 class="pl-2">Posts</h4>
+            <div style="border: 1px solid #000; padding: 5px; border-radius: 5px; background-color: #e1dfdf; ">
+                @foreach (var item in Model.Questions)
+                {
+                    <div style="padding:5px;border:1px solid #000;border-radius:5px;background-color:#fff">
+                        <p class="p-2">@item.Title</p>
+                        <div class="row">
+                            <div class="col-8"></div>
+                            <div class="col-4 text-end">
+                                <span class=" p-2 text-primary">Created At: @item.CreatedAt.ToShortDateString()</span>
+                                <a href="@Url.Action("QuestionDetails", "Question", new { id = item.Id })" class="btn btn-outline-primary">
+                                    <i class="bi bi-search"></i> Details
+                                </a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

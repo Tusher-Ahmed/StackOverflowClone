@@ -8,6 +8,12 @@
 <div class="row pb-4">
     <div class="col-md-7">
         <h4>@Model.Question.Title</h4>
+        @{ 
+            TimeSpan timeDifference = DateTime.Now - Model.Question.CreatedAt;
+
+            int daysDifference = (int)timeDifference.TotalDays;
+            <small>Asked @daysDifference day's before</small>
+        }
         
     </div>
     <div class="col-md-5 text-end">
@@ -30,5 +36,5 @@
             }
         </small>
     </div>
-    @*<div class="text-end"><span>@Model.Client.Username.ToString()</span></div>*@
+    <div class="text-end"><small class="text-primary">@Model.Client.Username</small></div>
 </div>

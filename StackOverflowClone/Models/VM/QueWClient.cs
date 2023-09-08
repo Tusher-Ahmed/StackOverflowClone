@@ -8,6 +8,7 @@ namespace StackOverflowClone.Models.VM
     public class QueWClient
     {
         public Question Question { get; set; }
+        public IEnumerable<Question> Questions { get; set; }
         public Client Client { get; set; }
     }
 }

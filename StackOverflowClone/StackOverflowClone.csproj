@@ -162,6 +162,8 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\profile.jpg" />
+    <Content Include="Images\stack-overflow.png" />
     <Content Include="Mappings\Client.hbm.xml" />
     <Content Include="Mappings\Question.hbm.xml" />
     <Content Include="Models\hibernate.cfg.xml" />
@@ -200,6 +202,8 @@
     <Content Include="Views\Account\SignUp.cshtml" />
     <Content Include="Views\Question\Index.cshtml" />
     <Content Include="Views\Question\QuestionDetails.cshtml" />
+    <Content Include="Views\Question\Profile.cshtml" />
+    <Content Include="Views\Question\AskQuestion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
