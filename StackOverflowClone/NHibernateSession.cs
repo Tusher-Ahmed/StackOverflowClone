@@ -15,7 +15,9 @@ namespace StackOverflowClone
             var configurationPath = HttpContext.Current.Server.MapPath(@"~\Models\hibernate.cfg.xml");
             configuration.Configure(configurationPath);
             var clientConfigurationFile = HttpContext.Current.Server.MapPath(@"~\Mappings\Client.hbm.xml");
+            var questionConfigurationFile = HttpContext.Current.Server.MapPath(@"~\Mappings\Question.hbm.xml");
             configuration.AddFile(clientConfigurationFile);
+            configuration.AddFile(questionConfigurationFile);
             ISessionFactory sessionFactory = configuration.BuildSessionFactory();
             return sessionFactory.OpenSession();
         }

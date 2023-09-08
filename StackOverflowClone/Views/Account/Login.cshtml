@@ -22,5 +22,9 @@
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Log In</button>
         </div>
+        <div>
+            Don’t have an account? 
+            @Html.ActionLink("SignUp", "SignUp", "Account", new { area = "" }, new { @class = "text-primary text-decoration-none" })
+        </div>
     </div>
 }

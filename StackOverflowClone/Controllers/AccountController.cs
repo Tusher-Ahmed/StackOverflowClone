@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 namespace StackOverflowClone.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         // GET: Account

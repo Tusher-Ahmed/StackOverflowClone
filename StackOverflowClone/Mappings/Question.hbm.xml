@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" auto-import="true" assembly="StackOverflowClone" namespace="StackOverflowClone.Models">
+  <class name="Question" table="Question" dynamic-update="true" >
+    <cache usage="read-write"/>
+    <id name="Id" column="Id" type="long">
+      <generator class="native" />
+    </id>
+
+    <property name="Title" />
+    <property name="Body" />
+    <property name="ExpectResult" />
+    <property name="Tags" />
+    <property name="CreatedAt" />
+
+    <many-to-one name="Client" class="Client" column="ClientId" foreign-key="fk_questions_clientId" fetch="select" />
+
+  </class>
+</hibernate-mapping>
+
