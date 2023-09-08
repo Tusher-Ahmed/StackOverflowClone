@@ -5,30 +5,72 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using System.Web.Security;
 namespace StackOverflowClone.Controllers
 {
     public class AccountController : Controller
     {
         // GET: Account
-        public ActionResult Index()
-        {
-            IList<Client> users;
-            using (ISession session = NHibernateSession.OpenSession())
-            {
-                users = session.Query<Client>().ToList();
-            }
-            return View(users);
-        }
-        public ActionResult Details(int id)
-        {
-            Client user= new Client();
-            using (ISession session = NHibernateSession.OpenSession())
-            {
-                user = session.Query<Client>().Where(b => b.Id == id).FirstOrDefault();
-            }
+        public ActionResult Login()
+        { 
 
-            return View(user);
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Login(Client client)
+        {
+            using (ISession session = NHibernateSession.OpenSession())
+            {
+                if(ModelState.IsValid)
+                {
+                    var isValid = session.Query<Client>().Where(b => b.Email == client.Email && b.Password == client.Password).FirstOrDefault();
+                    if (isValid != null) {
+                        FormsAuthentication.SetAuthCookie(client.Username, false);
+                        return RedirectToAction("Index", "Home");
+                    }
+                    
+                }                  
+                    ModelState.AddModelError("", "Invalid Email or Password.");
+                    return View();   
+            }
+            
+        }
+        public ActionResult SignUp()
+        {          
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SignUp(Client cli)
+        {
+            try
+            {
+                Client client = new Client();  
+                client.Email = cli.Email;
+                client.Password = cli.Password;
+                client.Username= cli.Username;
+
+             
+                using (ISession session = NHibernateSession.OpenSession())
+                {
+                    using (ITransaction transaction = session.BeginTransaction())   
+                    {
+                        session.Save(client); 
+                        transaction.Commit();   
+                    }
+                }
+                return RedirectToAction("Login");
+            }
+            catch (Exception e)
+            {
+                return View();
+            }
+            
+        }
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
         }
     }
 }
