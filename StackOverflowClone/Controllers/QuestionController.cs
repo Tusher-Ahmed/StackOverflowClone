@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace StackOverflowClone.Controllers
 {
-    [AllowAnonymous]
+    
     public class QuestionController : Controller
     {
         // GET: Question
@@ -30,6 +30,7 @@ namespace StackOverflowClone.Controllers
             }
                 
         }
+        [AllowAnonymous]
         public ActionResult QuestionDetails(long id)
         {
             if (id == 0)
@@ -91,10 +92,41 @@ namespace StackOverflowClone.Controllers
             }
             return RedirectToAction("Index");
         }
-
+        //[Authorize]
+        [AllowAnonymous]
         public ActionResult AskQuestion()
         {
             return View();
+        }
+        [HttpPost]
+        public ActionResult AskQuestion(Question que)
+        {
+
+            if(ModelState.IsValid)
+            {
+                var email=User.Identity.Name;
+                using (ISession session = NHibernateSession.OpenSession())
+                {
+                    var profile=session.Query<Client>().FirstOrDefault(u => u.Email == email);
+                    Question question = new Question();
+                    question.Title = que.Title;
+                    question.Body = que.Body;
+                    question.ExpectResult = que.ExpectResult;
+                    question.Tags = que.Tags;
+                    question.ClientId = profile.Id;
+                    question.CreatedAt = DateTime.Now;
+
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {  
+                       
+                        session.Save(question);
+                        transaction.Commit();
+                        return RedirectToAction("Index", "Question");
+                    }
+                }
+            }
+            return View(que);
+
         }
     }
 }

@@ -27,10 +27,15 @@
         <div class="pt-4">
             <h4 class="p-0">Stats</h4>
             <div class="row" style="border:1px solid #000; padding:5px;border-radius:5px;">
-                <div class="col-6">reputation</div>
-                <div class="col-6">reached</div>
-                <div class="col-6">answers</div>
-                <div class="col-6">questions</div>
+                <div class="col-6">0<br />reputation</div>
+                <div class="col-6">0<br />reached</div>
+                <div class="col-6">
+                0<br/>
+                answers</div>
+                <div class="col-6">
+                @Model.Questions.Count()<br/>
+                questions
+                </div>
             </div>
         </div>
         <div class="pt-4">
@@ -55,8 +60,8 @@
             <div style="border: 1px solid #000; padding: 5px; border-radius: 5px; background-color: #e1dfdf; ">
                 @foreach (var item in Model.Questions)
                 {
-                    <div style="padding:5px;border:1px solid #000;border-radius:5px;background-color:#fff">
-                        <p class="p-2">@item.Title</p>
+                    <div style="padding:5px;border:1px solid #000;border-radius:5px;background-color:#fff;margin-bottom:5px;">
+                        <h5 class="p-2">@item.Title</h5>
                         <div class="row">
                             <div class="col-8"></div>
                             <div class="col-4 text-end">

@@ -14,10 +14,14 @@
 </div>
 @foreach (var item in Model)
 {
-    <div style="display:block;border:1px solid #000;padding:5px;margin-bottom:5px;">
+    <div style="display:block;border:1px solid #000;margin-bottom:5px;">
         <div class="row p-0">
             <div class="col-md-1">
-                hello
+                <ul style="list-style-type: none;text-align:right">
+                    <li >votes</li>
+                    <li >answer</li>
+                    <li >views</li>
+                </ul>
             </div>
             <div class="col-md-10" style="border-left:1px solid #000">
                   <div> @Html.ActionLink(item.Title, "QuestionDetails", "Question", new { id = item.Id }, new { @class = "text-primary text-decoration-none text-left" })</div>
@@ -33,7 +37,7 @@
                            }
                        </div>
                        <div class="col-md-7 text-end">
-                           <span class="text-primary" style="font-size:10px;">@item.Client.Username </span>
+                           <span class="text-primary" style="font-size:10px; padding-right:5px;">@item.Client.Username  </span><span style="font-size:10px;color:#000">  modified @item.CreatedAt.ToLongDateString()</span>
                        </div>
                    </div>
             </div>
