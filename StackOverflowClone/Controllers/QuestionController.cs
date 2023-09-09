@@ -37,16 +37,9 @@ namespace StackOverflowClone.Controllers
             {
                 return RedirectToAction("Index");
             }
-            //Question question = new Question();
-            //Client client = new Client();
-            //QueWClient queWClient = new QueWClient();
+
             using (ISession session = NHibernateSession.OpenSession())
             {
-                //question = session.Query<Question>().Where(b => b.Id == id).FirstOrDefault();
-                //client=session.Query<Client>().Where(u=>u.Id==question.ClientId).FirstOrDefault();                
-                //queWClient.Question = question;
-                //queWClient.Client = client;
-                //return View(queWClient);
 
                 var question = session.CreateCriteria<Question>().Add(Restrictions.IdEq(id))
                          .SetFetchMode("Client", FetchMode.Eager)
@@ -92,6 +85,54 @@ namespace StackOverflowClone.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        public ActionResult EditProfile(long id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Profile", "Question");
+            }
+            Client client = new Client();
+            using (ISession session = NHibernateSession.OpenSession())
+            {
+                client = session.Query<Client>().Where(b => b.Id == id).FirstOrDefault();
+            }
+
+
+            return View(client);
+
+        }
+        [HttpPost]
+        public ActionResult EditProfile(long id, Client cli)
+        {
+            try
+            {
+           
+                // TODO: Add insert logic here
+                using (ISession session = NHibernateSession.OpenSession())
+                {
+                    session.Clear();
+                    var client = session.Get<Client>(id);
+                    //Client client = new Client();              
+                    client.Username = cli.Username;
+                    
+                    client.AboutMe = cli.AboutMe;
+                    
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        session.Update(client);
+                        transaction.Commit();
+                    }
+                }
+                return RedirectToAction("Profile","Question");
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View();
+            }
+        }
+
         //[Authorize]
         [AllowAnonymous]
         public ActionResult AskQuestion()

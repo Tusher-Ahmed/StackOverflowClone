@@ -22,7 +22,7 @@
 
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink(@User.Identity.Name, "Profile", "Account", new { @class = "nav-link " })</li>
+                        <li>@Html.ActionLink(@User.Identity.Name, "Profile", "Question", new { @class = "nav-link " })</li>
                         <li>@Html.ActionLink("Logout", "Logout", "Account", new { area = "" }, new { @class = "nav-link" })</li>
 
                     }

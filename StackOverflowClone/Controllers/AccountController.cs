@@ -83,5 +83,7 @@ namespace StackOverflowClone.Controllers
             Session.Abandon();
             return RedirectToAction("Index","Question");
         }
+
+        
     }
 }

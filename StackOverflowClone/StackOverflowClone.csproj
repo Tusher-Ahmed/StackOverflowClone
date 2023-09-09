@@ -204,6 +204,7 @@
     <Content Include="Views\Question\QuestionDetails.cshtml" />
     <Content Include="Views\Question\Profile.cshtml" />
     <Content Include="Views\Question\AskQuestion.cshtml" />
+    <Content Include="Views\Question\EditProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
