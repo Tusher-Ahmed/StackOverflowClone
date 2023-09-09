@@ -37,7 +37,16 @@
                            }
                        </div>
                        <div class="col-md-7 text-end">
-                           <span class="text-primary" style="font-size:10px; padding-right:5px;">@item.Client.Username  </span><span style="font-size:10px;color:#000">  modified @item.CreatedAt.ToLongDateString()</span>
+                           <span class="text-primary" style="font-size:10px; padding-right:5px;">@item.Client.Username  </span>
+                           @{
+                               TimeSpan timeDifference = DateTime.Now - item.CreatedAt;
+
+                               int daysDifference = (int)timeDifference.TotalDays;                          
+                               <span style="font-size:10px;color:#000">
+                                   Asked @daysDifference day's ago
+                               </span>
+                           }
+
                        </div>
                    </div>
             </div>

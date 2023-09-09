@@ -139,6 +139,7 @@ namespace StackOverflowClone.Controllers
         {
             return View();
         }
+        
         [HttpPost]
         public ActionResult AskQuestion(Question que)
         {

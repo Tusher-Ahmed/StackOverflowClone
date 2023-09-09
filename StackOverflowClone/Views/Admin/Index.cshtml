@@ -1,0 +1,30 @@
+﻿@model IEnumerable<StackOverflowClone.Models.Question>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Manage Questions</h2>
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>User Id</th>
+            <th>Question Title</th>
+            <th>Created Date</th>
+            <th>#</th>
+        </tr>
+    </thead>
+    <tbody>
+       @foreach(var item in Model)
+            {<tr>
+                <td>@item.Client.Id</td>
+                <td>@item.Title</td>
+                <td>@item.CreatedAt.ToShortDateString()</td>
+                <td>
+                    @Html.ActionLink("Approve", "Approve", "Admin", new { id = item.Id }, new { @class = "btn btn-outline-success" })
+                    @Html.ActionLink("Delete", "Delete", "Admin", new { id = item.Id }, new { @class = "btn btn-outline-danger" })
+                </td>
+            </tr>
+            }
+    </tbody>
+</table>
+
