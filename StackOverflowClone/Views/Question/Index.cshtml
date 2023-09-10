@@ -25,14 +25,14 @@
             </div>
             <div class="col-md-10" style="border-left:1px solid #000">
                   <div> @Html.ActionLink(item.Title, "QuestionDetails", "Question", new { id = item.Id }, new { @class = "text-primary text-decoration-none text-left" })</div>
-                   <div class="row">
+                   <div class="row pb-0 pt-4">
                        <div class="col-md-5">
                            @{ 
                                char[] delimiterChars = { ' ', ',', ';' };
                                string[] mytag = item.Tags.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
                                foreach(var i in mytag)
                                {
-                                   <span style="color:#0a9eb2;padding:2px 3px;background-color:#91d4dd;border-radius:5px;font-size:10px;">@i</span>
+                                   <span style="color:#0a9eb2;padding:2px 5px;background-color:#91d4dd;border-radius:5px;font-size:10px;">@i</span>
                                }
                            }
                        </div>
