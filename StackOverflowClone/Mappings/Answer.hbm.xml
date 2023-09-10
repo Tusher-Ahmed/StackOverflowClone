@@ -8,6 +8,8 @@
     <property name="Username" column="Username" />
     <property name="QuestionId" column="QuestionId" />
     <property name="Vote" column="Vote" />
+    <property name="PosVote" column="PosVote" />
+    <property name="NegVote" column="NegVote" />
     <property name="CreatedAt" column="CreatedAt" />
 
    

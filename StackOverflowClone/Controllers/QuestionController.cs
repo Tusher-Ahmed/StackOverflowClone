@@ -212,5 +212,60 @@ namespace StackOverflowClone.Controllers
                 }
             }           
         }
+
+        [HttpPost]
+        public ActionResult VoteUp(long id)
+        {
+                using (ISession session = NHibernateSession.OpenSession())
+                {
+                    session.Clear();
+                    var answer = session.Get<Answer>(id);
+                if (answer.PosVote == false)
+                {
+                    answer.Vote += 1;
+                    answer.PosVote = true;
+                    answer.NegVote = false;
+                }
+                else
+                {
+                    return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
+                }
+
+                using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        session.Update(answer);
+                        transaction.Commit();
+                        return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
+                    }
+                }
+          
+        }
+        [HttpPost]
+        public ActionResult VoteDown(long id)
+        {
+            using (ISession session = NHibernateSession.OpenSession())
+            {
+                session.Clear();
+                var answer = session.Get<Answer>(id);
+                if(answer.NegVote==false)
+                {
+                    answer.Vote -= 1;
+                    answer.NegVote= true;
+                    answer.PosVote = false;
+                }
+                else
+                {
+                    return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
+                }
+               
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    session.Update(answer);
+                    transaction.Commit();
+                    return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
+                }
+            }
+
+        }
     }
 }

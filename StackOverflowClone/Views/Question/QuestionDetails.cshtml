@@ -47,13 +47,17 @@
     {
         <div class="row pb-2 pt-2">
             <div class="col-1">
-                <a href="@Url.Action("QuestionDetails", "Question", new { id = item.Id })" class="btn btn-outline-primary">
-                    <i class="bi bi-caret-up-fill"></i>
-                </a>
-                <h3 style="margin-left:10px">@item.Vote</h3>
-                <a href="@Url.Action("QuestionDetails", "Question", new { id = item.Id })" class="btn btn-outline-primary">
-                    <i class="bi bi-caret-down-fill"></i>
-                </a>
+                <form method="post" action="@Url.Action("VoteUp", "Question", new { id = item.Id })">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                </form>  
+                <h3 style="margin-left:10px">@item.Vote</h3> 
+                <form method="post" action="@Url.Action("VoteDown", "Question", new { id = item.Id })">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                </form>
             </div>
             <div class="col-11">
                 <p>@item.QuestionsAnswer</p>
