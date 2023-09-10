@@ -10,10 +10,9 @@
     <property name="Body" />
     <property name="ExpectResult" />
     <property name="Tags" />
+    <property name="ClientId" />
     <property name="CreatedAt" />
     <property name="Approve" />
-
-    <many-to-one name="Client" class="Client" column="ClientId" foreign-key="FK_Question_Client" fetch="select" />
 
   </class>
 </hibernate-mapping>

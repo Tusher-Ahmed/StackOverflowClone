@@ -137,6 +137,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\VM\QueWClient.cs" />
@@ -165,6 +166,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\profile.jpg" />
     <Content Include="Images\stack-overflow.png" />
+    <Content Include="Mappings\Answer.hbm.xml" />
     <Content Include="Mappings\Client.hbm.xml" />
     <Content Include="Mappings\Question.hbm.xml" />
     <Content Include="Models\hibernate.cfg.xml" />

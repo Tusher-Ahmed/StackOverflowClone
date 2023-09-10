@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
+  <class name="StackOverflowClone.Models.Answer, StackOverflowClone" table="Answer">
+    <id name="Id">
+      <generator class="identity" />
+    </id>
+    <property name="QuestionsAnswer" column="QuestionsAnswer" />
+    <property name="Username" column="Username" />
+    <property name="QuestionId" column="QuestionId" />
+    <property name="Vote" column="Vote" />
+    <property name="CreatedAt" column="CreatedAt" />
+
+   
+  </class>
+</hibernate-mapping>

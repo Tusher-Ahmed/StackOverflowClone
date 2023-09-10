@@ -16,12 +16,7 @@ namespace StackOverflowClone.Controllers
         {
             using (ISession session = NHibernateSession.OpenSession())
             {
-                var question = session.Query<Question>().Where(u=>u.Approve==false).ToList();
-                foreach (var ques in question)
-                {
-                    NHibernateUtil.Initialize(ques.Client); // Initialize the proxy
-                }
-
+                var question = session.Query<Question>().Where(u=>u.Approve==false).ToList();                
                 return View(question);
             }
             
@@ -29,7 +24,7 @@ namespace StackOverflowClone.Controllers
 
         public ActionResult Approve(long id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return RedirectToAction("Index");
             }
@@ -75,18 +70,13 @@ namespace StackOverflowClone.Controllers
             using (ISession session = NHibernateSession.OpenSession())
             {
                 var question = session.Query<Question>().Where(u => u.Approve == true).ToList();
-                foreach (var ques in question)
-                {
-                    NHibernateUtil.Initialize(ques.Client); // Initialize the proxy
-                }
-
                 return View(question);
             }
         }
 
         public ActionResult Delete(long id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return RedirectToAction("Index");
             }
@@ -130,6 +120,7 @@ namespace StackOverflowClone.Controllers
             }
             catch (Exception e)
             {
+                ModelState.AddModelError("", e.Message);
                 return View();
             }
         }
@@ -145,7 +136,7 @@ namespace StackOverflowClone.Controllers
 
         public ActionResult DeleteUser(long id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return RedirectToAction("Index");
             }
@@ -181,6 +172,7 @@ namespace StackOverflowClone.Controllers
             }
             catch (Exception e)
             {
+                ModelState.AddModelError("", e.Message);
                 return View();
             }
         }

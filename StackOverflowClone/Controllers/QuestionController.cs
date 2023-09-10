@@ -21,12 +21,19 @@ namespace StackOverflowClone.Controllers
             using (ISession session = NHibernateSession.OpenSession())
             {
                 var question=session.Query<Question>().Where(u=>u.Approve==true).ToList();
-                foreach (var ques in question)
+                Dictionary<long,string> result = new Dictionary<long,string>();
+                foreach(var item in question)
                 {
-                    NHibernateUtil.Initialize(ques.Client); // Initialize the proxy
+                    var client=session.Query<Client>().FirstOrDefault(u=>u.Id==item.ClientId);
+                    result.Add(item.Id, client.Username);
                 }
-
-                return View(question);
+                QueWClient queWClient = new QueWClient
+                {
+                    Questions = question,
+                    MapedQC = result
+                    
+                };
+                return View(queWClient);
             }
                 
         }
@@ -41,10 +48,19 @@ namespace StackOverflowClone.Controllers
             using (ISession session = NHibernateSession.OpenSession())
             {
 
-                var question = session.CreateCriteria<Question>().Add(Restrictions.IdEq(id))
-                         .SetFetchMode("Client", FetchMode.Eager)
-                         .UniqueResult<Question>();
-
+                var question = session.Query<Question>().FirstOrDefault(u=>u.Id==id);
+                var client=session.Query<Client>().FirstOrDefault(u=>u.Id==question.ClientId);
+                var answer= new List<Answer>();
+                var answer1 = session.Query<Answer>().Where(u => u.QuestionId == question.Id).FirstOrDefault();
+                if (answer1 != null)
+                {
+                     answer = session.Query<Answer>().Where(u => u.QuestionId == question.Id).ToList();
+                }
+                else
+                {
+                    answer = new List<Answer>();
+                }
+                
                 if (question == null)
                 {            
                     return RedirectToAction("NotFound");
@@ -53,7 +69,8 @@ namespace StackOverflowClone.Controllers
                 QueWClient queWClient = new QueWClient
                 {
                     Question = question,
-                    Client = question.Client
+                    Client = client,
+                    Answers = answer
                 };
 
                 return View(queWClient);
@@ -72,10 +89,7 @@ namespace StackOverflowClone.Controllers
                 using (ISession session = NHibernateSession.OpenSession())
                 {
                     var profile = session.Query<Client>().Where(u => u.Email == username).FirstOrDefault();
-                    IList<Question> questions = session.QueryOver<Question>()
-                                                .JoinQueryOver(q => q.Client)
-                                                .Where(c => c.Id == profile.Id)
-                                                .List();
+                    var questions = session.Query<Question>().Where(u => u.ClientId == profile.Id).ToList();
                     QueWClient queWClient = new QueWClient();
                     queWClient.Client = profile;
                     queWClient.Questions = questions;
@@ -88,7 +102,7 @@ namespace StackOverflowClone.Controllers
 
         public ActionResult EditProfile(long id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return RedirectToAction("Profile", "Question");
             }

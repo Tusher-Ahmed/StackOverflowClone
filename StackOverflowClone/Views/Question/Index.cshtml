@@ -1,4 +1,4 @@
-﻿@model IEnumerable<StackOverflowClone.Models.Question>
+﻿@model StackOverflowClone.Models.VM.QueWClient
 @{
     ViewBag.Title = "Index";
 }
@@ -12,43 +12,44 @@
         @Html.ActionLink("Ask Question", "AskQuestion", "Question", new { @class = "btn btn-primary" })
     </div>
 </div>
-@foreach (var item in Model)
+
+@foreach (var item in Model.Questions)
 {
     <div style="display:block;border:1px solid #000;margin-bottom:5px; background-color:#fbf3d5">
         <div class="row p-0">
             <div class="col-md-1">
                 <ul style="list-style-type: none;text-align:right">
-                    <li >votes</li>
-                    <li >answer</li>
-                    <li >views</li>
+                    <li>votes</li>
+                    <li>answer</li>
+                    <li>views</li>
                 </ul>
             </div>
             <div class="col-md-10" style="border-left:1px solid #000">
-                  <div> @Html.ActionLink(item.Title, "QuestionDetails", "Question", new { id = item.Id }, new { @class = "text-primary text-decoration-none text-left" })</div>
-                   <div class="row pb-0 pt-4">
-                       <div class="col-md-5">
-                           @{ 
-                               char[] delimiterChars = { ' ', ',', ';' };
-                               string[] mytag = item.Tags.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
-                               foreach(var i in mytag)
-                               {
-                                   <span style="color:#0a9eb2;padding:2px 5px;background-color:#91d4dd;border-radius:5px;font-size:10px;">@i</span>
-                               }
-                           }
-                       </div>
-                       <div class="col-md-7 text-end">
-                           <span class="text-primary" style="font-size:10px; padding-right:5px;">@item.Client.Username  </span>
-                           @{
-                               TimeSpan timeDifference = DateTime.Now - item.CreatedAt;
+                <div> @Html.ActionLink(item.Title, "QuestionDetails", "Question", new { id = item.Id }, new { @class = "text-primary text-decoration-none text-left" })</div>
+                <div class="row pb-0 pt-4">
+                    <div class="col-md-5">
+                        @{
+                            char[] delimiterChars = { ' ', ',', ';' };
+                            string[] mytag = item.Tags.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
+                            foreach (var i in mytag)
+                            {
+                                <span style="color:#0a9eb2;padding:2px 5px;background-color:#91d4dd;border-radius:5px;font-size:10px;">@i</span>
+                            }
+                        }
+                    </div>
+                    <div class="col-md-7 text-end">
+                        <span class="text-primary" style="font-size:10px; padding-right:5px;">@Model.MapedQC[item.Id] </span>
+                        @{
+                            TimeSpan timeDifference = DateTime.Now - item.CreatedAt;
 
-                               int daysDifference = (int)timeDifference.TotalDays;                          
-                               <span style="font-size:10px;color:#000">
-                                   Asked @daysDifference day's ago
-                               </span>
-                           }
+                            int daysDifference = (int)timeDifference.TotalDays;
+                            <span style="font-size:10px;color:#000">
+                                Asked @daysDifference day's ago
+                            </span>
+                        }
 
-                       </div>
-                   </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

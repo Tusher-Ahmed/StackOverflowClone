@@ -1,6 +1,5 @@
 ﻿@model StackOverflowClone.Models.Question
 
-<h2>Approve Question</h2>
 
 <h3>Are you sure you want to approve this?</h3>
 <div>
@@ -53,9 +52,10 @@
     {
         @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Approve" class="btn btn-outline-success" />
-            @Html.ActionLink("Back to List", "Index", "Admin", new { @class = "btn btn-outline-secondary" })
-        </div>
+<div class="form-actions no-color">
+    <input type="submit" value="Approve" class="btn btn-outline-success" />
+    @Html.ActionLink("Delete", "Delete", "Admin", new { id = Model.Id }, new { @class = "btn btn-outline-danger" })
+    @Html.ActionLink("Back to List", "Index", "Admin", new { @class = "btn btn-outline-secondary" })
+</div>
     }
 </div>
