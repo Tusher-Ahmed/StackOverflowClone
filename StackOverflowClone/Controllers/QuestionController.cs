@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace StackOverflowClone.Controllers
 {
-    
+    [Authorize]
     public class QuestionController : Controller
     {
         // GET: Question
@@ -20,7 +20,7 @@ namespace StackOverflowClone.Controllers
         {
             using (ISession session = NHibernateSession.OpenSession())
             {
-                var question=session.Query<Question>().ToList();
+                var question=session.Query<Question>().Where(u=>u.Approve==true).ToList();
                 foreach (var ques in question)
                 {
                     NHibernateUtil.Initialize(ques.Client); // Initialize the proxy
@@ -157,6 +157,7 @@ namespace StackOverflowClone.Controllers
                     question.Tags = que.Tags;
                     question.ClientId = profile.Id;
                     question.CreatedAt = DateTime.Now;
+                    question.Approve=false;
 
                     using (ITransaction transaction = session.BeginTransaction())
                     {  
@@ -167,6 +168,7 @@ namespace StackOverflowClone.Controllers
                     }
                 }
             }
+            ModelState.AddModelError("", "Invalid Input");
             return View(que);
 
         }

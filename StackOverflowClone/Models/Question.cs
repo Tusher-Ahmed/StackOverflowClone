@@ -17,6 +17,7 @@ namespace StackOverflowClone.Models
         public virtual long ClientId { get; set; }
         public virtual Client Client { get; set; }      
         public virtual DateTime CreatedAt { get; set; }
+        public virtual bool Approve { get; set; }
         
     }
 }

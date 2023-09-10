@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace StackOverflowClone.Controllers
 {
+    [AllowAnonymous]
     public class AdminController : Controller
     {
         // GET: Admin
@@ -15,7 +16,7 @@ namespace StackOverflowClone.Controllers
         {
             using (ISession session = NHibernateSession.OpenSession())
             {
-                var question = session.Query<Question>().ToList();
+                var question = session.Query<Question>().Where(u=>u.Approve==false).ToList();
                 foreach (var ques in question)
                 {
                     NHibernateUtil.Initialize(ques.Client); // Initialize the proxy
@@ -43,7 +44,33 @@ namespace StackOverflowClone.Controllers
                 return RedirectToAction("Index");
             }
         }
+        [HttpPost]
+        public ActionResult Approve(long id, Question ques)
+        {
+            try
+            {
 
+                // TODO: Add insert logic here
+                using (ISession session = NHibernateSession.OpenSession())
+                {
+                    session.Clear();
+                    var question = session.Get<Question>(id);
+                    question.Approve = true;
+
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        session.Update(question);
+                        transaction.Commit();
+                    }
+                }
+                return RedirectToAction("Index", "Admin");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View();
+            }
+        }
 
 
 
