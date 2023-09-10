@@ -63,7 +63,7 @@ namespace StackOverflowClone.Controllers
                 
                 if (question == null)
                 {            
-                    return RedirectToAction("NotFound");
+                    return RedirectToAction("Index");
                 }
 
                 QueWClient queWClient = new QueWClient
@@ -182,9 +182,35 @@ namespace StackOverflowClone.Controllers
                     }
                 }
             }
-            ModelState.AddModelError("", "Invalid Input");
+           
             return View(que);
 
+        }
+        [HttpPost]
+        public ActionResult AddComment(string CommentText, long QuestionId)
+        {
+            if (CommentText == null)
+            {
+                return RedirectToAction("QuestionDetails", "Question", new {id= QuestionId });
+            }
+            var email = User.Identity.Name;
+            using (ISession session = NHibernateSession.OpenSession())
+            {
+                var profile = session.Query<Client>().FirstOrDefault(u => u.Email == email);
+                Answer answer = new Answer();
+                answer.QuestionsAnswer = CommentText;
+                answer.Username= profile.Username;
+                answer.QuestionId = QuestionId;
+                answer.Vote = 0;
+                answer.CreatedAt= DateTime.Now;
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+
+                    session.Save(answer);
+                    transaction.Commit();
+                    return RedirectToAction("QuestionDetails", "Question",new { id = QuestionId });
+                }
+            }           
         }
     }
 }

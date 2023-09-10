@@ -8,20 +8,20 @@
 <div class="row pb-4">
     <div class="col-md-7">
         <h4>@Model.Question.Title</h4>
-        @{ 
+        @{
             TimeSpan timeDifference = DateTime.Now - Model.Question.CreatedAt;
 
             int daysDifference = (int)timeDifference.TotalDays;
             <small>Asked @daysDifference day's ago</small>
         }
-        
+
     </div>
     <div class="col-md-5 text-end">
         @Html.ActionLink("Ask Question", "AskQuestion", "Question", new { @class = "btn btn-primary" })
     </div>
 </div>
-<hr/>
-<div class="row pt-2" >
+<hr />
+<div class="row pt-2">
     <div>
         <p>@Model.Question.Body</p>
         <p>@Model.Question.ExpectResult</p>
@@ -36,7 +36,7 @@
             }
         </small>
     </div>
-    <div class="text-end"><small class="text-primary">@Model.Client.Username</small></div>   
+    <div class="text-end"><small class="text-primary">@Model.Client.Username</small></div>
 </div>
 <hr />
 <hr />
@@ -45,35 +45,48 @@
 {
     foreach (var item in Model.Answers)
     {
-                    <div class="row pb-2 pt-2">
-                        <div class="col-1">
-                            <a href="@Url.Action("QuestionDetails", "Question", new { id = item.Id })" class="btn btn-outline-primary">
-                                <i class="bi bi-caret-up-fill"></i> 
-                            </a>
-                            <h3 style="margin-left:10px">@item.Vote</h3>
-                            <a href="@Url.Action("QuestionDetails", "Question", new { id = item.Id })" class="btn btn-outline-primary">
-                                <i class="bi bi-caret-down-fill"></i>
-                            </a>
-                        </div>
-                        <div class="col-11">
-                            <p>@item.QuestionsAnswer</p>
-                        </div>
-                        <div class="col-12 pt-4 text-end">
-                            <small class="text-primary">@item.Username</small> 
-                            <small>
-                                @{
-                                    TimeSpan Difference = DateTime.Now - item.CreatedAt;
+        <div class="row pb-2 pt-2">
+            <div class="col-1">
+                <a href="@Url.Action("QuestionDetails", "Question", new { id = item.Id })" class="btn btn-outline-primary">
+                    <i class="bi bi-caret-up-fill"></i>
+                </a>
+                <h3 style="margin-left:10px">@item.Vote</h3>
+                <a href="@Url.Action("QuestionDetails", "Question", new { id = item.Id })" class="btn btn-outline-primary">
+                    <i class="bi bi-caret-down-fill"></i>
+                </a>
+            </div>
+            <div class="col-11">
+                <p>@item.QuestionsAnswer</p>
+            </div>
+            <div class="col-12 pt-4 text-end">
+                <small class="text-primary">@item.Username</small>
+                <small>
+                    @{
+                        TimeSpan Difference = DateTime.Now - item.CreatedAt;
 
-                                    int dDifference = (int)Difference.TotalDays;
-                                    <small> answered @dDifference day's ago</small>
-                                }
-                            </small>
-                        </div>
-                    </div>
-                    <hr/>
+                        int dDifference = (int)Difference.TotalDays;
+                        <small> answered @dDifference day's ago</small>
+                    }
+                </small>
+            </div>
+        </div>
+        <hr />
     }
 }
-else { 
+else
+{
     <div>No answer yet</div>
 }
-
+<br />
+<div class="row pt-4">
+    <div class="col-md-12">
+        <h5>Add a Comment</h5>
+        <form method="post" action="@Url.Action("AddComment", "Question")">
+            <input type="hidden" name="QuestionId" value="@Model.Question.Id" />
+            <div class="form-group">
+                <textarea class="form-control" rows="5" cols="10" name="CommentText" placeholder="Write your comment here" required></textarea>
+            </div>
+            <input type="submit" value="Add Comment" class="btn btn-primary" />
+        </form>
+    </div>
+</div>

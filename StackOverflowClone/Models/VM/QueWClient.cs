@@ -10,6 +10,7 @@ namespace StackOverflowClone.Models.VM
         public Question Question { get; set; }
         public IEnumerable<Question> Questions { get; set; }
         public IEnumerable<Answer> Answers { get; set; }
+        public Answer Answer { get; set; }
         public Client Client { get; set; }
         public Dictionary<long, string> MapedQC { get; set; }
     }
