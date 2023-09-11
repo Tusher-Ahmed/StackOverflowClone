@@ -22,21 +22,36 @@
 </div>
 <hr />
 <div class="row pt-2">
-    <div>
-        <p>@Model.Question.Body</p>
-        <p>@Model.Question.ExpectResult</p>
-        <small>
-            @{
-                char[] delimiterChars = { ' ', ',', ';' };
-                string[] mytag = Model.Question.Tags.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var i in mytag)
-                {
-                    <span style="color:#0a9eb2;padding:2px 5px;background-color:#91d4dd;border-radius:5px;font-size:10px;">@i</span>
-                }
-            }
-        </small>
+    <div class="col-1">
+        <form method="post" action="@Url.Action("QVoteUp", "Question", new { id = Model.Question.Id })">
+            <button type="submit" class="btn btn-outline-primary">
+                <i class="bi bi-caret-up-fill"></i>
+            </button>
+        </form>
+        <h3 style="margin-left:10px">@Model.Question.QVote</h3>
+        <form method="post" action="@Url.Action("QVoteDown", "Question", new { id = Model.Question.Id })">
+            <button type="submit" class="btn btn-outline-primary">
+                <i class="bi bi-caret-down-fill"></i>
+            </button>
+        </form>
     </div>
-    <div class="text-end"><small class="text-primary">@Model.Client.Username</small></div>
+    <div class="col-11">
+        <div>
+            <p>@Model.Question.Body</p>
+            <p>@Model.Question.ExpectResult</p>
+            <small>
+                @{
+                    char[] delimiterChars = { ' ', ',', ';' };
+                    string[] mytag = Model.Question.Tags.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var i in mytag)
+                    {
+                        <span style="color:#0a9eb2;padding:2px 5px;background-color:#91d4dd;border-radius:5px;font-size:10px;">@i</span>
+                    }
+                }
+            </small>
+        </div>
+        <div class="text-end"><small class="text-primary">@Model.Client.Username</small></div>
+    </div>    
 </div>
 <hr />
 <hr />
@@ -82,15 +97,19 @@ else
     <div>No answer yet</div>
 }
 <br />
+<div class="container">
 <div class="row pt-4">
     <div class="col-md-12">
-        <h5>Add a Comment</h5>
+        <h5>Your Answer</h5>
         <form method="post" action="@Url.Action("AddComment", "Question")">
             <input type="hidden" name="QuestionId" value="@Model.Question.Id" />
             <div class="form-group">
                 <textarea class="form-control" rows="5" cols="10" name="CommentText" placeholder="Write your comment here" required></textarea>
             </div>
-            <input type="submit" value="Add Comment" class="btn btn-primary" />
+            <br/>
+            <input type="submit" value="Add Comment" class="btn btn-outline-primary" />
         </form>
     </div>
 </div>
+</div>
+

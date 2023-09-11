@@ -12,8 +12,6 @@ namespace StackOverflowClone.Models
         public virtual string Username { get; set; }
         public virtual long QuestionId { get; set; }
         public virtual long Vote { get; set; }
-        public virtual bool PosVote { get; set; }
-        public virtual bool NegVote { get; set; }
         public virtual DateTime CreatedAt { get; set; }
     }
 }

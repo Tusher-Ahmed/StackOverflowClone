@@ -138,8 +138,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Answer.cs" />
+    <Compile Include="Models\AnswerVote.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Question.cs" />
+    <Compile Include="Models\QuestionVote.cs" />
     <Compile Include="Models\VM\QueWClient.cs" />
     <Compile Include="NHibernateSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -167,8 +169,10 @@
     <Content Include="Images\profile.jpg" />
     <Content Include="Images\stack-overflow.png" />
     <Content Include="Mappings\Answer.hbm.xml" />
+    <Content Include="Mappings\AnswerVote.hbm.xml" />
     <Content Include="Mappings\Client.hbm.xml" />
     <Content Include="Mappings\Question.hbm.xml" />
+    <Content Include="Mappings\QuestionVote.hbm.xml" />
     <Content Include="Models\hibernate.cfg.xml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />

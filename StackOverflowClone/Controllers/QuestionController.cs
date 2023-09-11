@@ -20,7 +20,9 @@ namespace StackOverflowClone.Controllers
         {
             using (ISession session = NHibernateSession.OpenSession())
             {
-                var question=session.Query<Question>().Where(u=>u.Approve==true).ToList();
+                session.Clear();
+                var question = session.Query<Question>().Where(u => u.Approve == true).ToList();
+
                 Dictionary<long,string> result = new Dictionary<long,string>();
                 foreach(var item in question)
                 {
@@ -65,7 +67,13 @@ namespace StackOverflowClone.Controllers
                 {            
                     return RedirectToAction("Index");
                 }
-
+                var ques = session.Get<Question>(id);
+                ques.Views += 1;
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    session.Update(ques);
+                    transaction.Commit();
+                }
                 QueWClient queWClient = new QueWClient
                 {
                     Question = question,
@@ -170,6 +178,8 @@ namespace StackOverflowClone.Controllers
                     question.ExpectResult = que.ExpectResult;
                     question.Tags = que.Tags;
                     question.ClientId = profile.Id;
+                    question.Answer = 0;
+                    question.Views = 0;
                     question.CreatedAt = DateTime.Now;
                     question.Approve=false;
 
@@ -203,10 +213,13 @@ namespace StackOverflowClone.Controllers
                 answer.QuestionId = QuestionId;
                 answer.Vote = 0;
                 answer.CreatedAt= DateTime.Now;
+                var question = session.Get<Question>(QuestionId);         
+                question.Answer +=1 ;
                 using (ITransaction transaction = session.BeginTransaction())
                 {
 
                     session.Save(answer);
+                    session.Update(question);
                     transaction.Commit();
                     return RedirectToAction("QuestionDetails", "Question",new { id = QuestionId });
                 }
@@ -216,29 +229,65 @@ namespace StackOverflowClone.Controllers
         [HttpPost]
         public ActionResult VoteUp(long id)
         {
-                using (ISession session = NHibernateSession.OpenSession())
+            using (ISession session = NHibernateSession.OpenSession())
+            {
+                session.Clear();
+                var email = User.Identity.Name;
+                var answer = session.Get<Answer>(id);
+                var Client = session.Query<Client>().FirstOrDefault(u => u.Email == email);
+                var av = session.Query<AnswerVote>().FirstOrDefault(u => u.AnswerId == id && u.ClientId==Client.Id);
+                if (av == null)
                 {
-                    session.Clear();
-                    var answer = session.Get<Answer>(id);
-                if (answer.PosVote == false)
-                {
-                    answer.Vote += 1;
-                    answer.PosVote = true;
-                    answer.NegVote = false;
-                }
-                else
-                {
-                    return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
-                }
+                    AnswerVote answerVote = new AnswerVote();
+                    if (answerVote.PositiveVote == false)
+                    {
+                        answer.Vote += 1;
+                        answerVote.PositiveVote = true;
+                        answerVote.NegativeVote = false;
+                        answerVote.AnswerId = id;
+                        answerVote.QuestionId = answer.QuestionId;
+                        answerVote.ClientId = Client.Id;
+                    }
+                    else
+                    {
+                        return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
+                    }
 
-                using (ITransaction transaction = session.BeginTransaction())
+                    using (ITransaction transaction = session.BeginTransaction())
                     {
                         session.Update(answer);
+                        session.Save(answerVote);
                         transaction.Commit();
                         return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
                     }
                 }
-          
+                else
+                {
+                    if (av.PositiveVote == false)
+                    {
+                        answer.Vote += 1;
+                        av.PositiveVote = true;
+                        av.NegativeVote = false;
+                        av.AnswerId = id;
+                        av.QuestionId = answer.QuestionId;
+                        av.ClientId = Client.Id;
+                    }
+                    else
+                    {
+                        return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
+                    }
+
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        session.Update(answer);
+                        session.Update(av);
+                        transaction.Commit();
+                        return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
+                    }
+                }
+
+            }
+
         }
         [HttpPost]
         public ActionResult VoteDown(long id)
@@ -246,26 +295,188 @@ namespace StackOverflowClone.Controllers
             using (ISession session = NHibernateSession.OpenSession())
             {
                 session.Clear();
+                var email = User.Identity.Name;
                 var answer = session.Get<Answer>(id);
-                if(answer.NegVote==false)
+                var Client = session.Query<Client>().FirstOrDefault(u => u.Email == email);
+                var av = session.Query<AnswerVote>().FirstOrDefault(u => u.AnswerId == id && u.ClientId == Client.Id);
+                if (av == null)
                 {
-                    answer.Vote -= 1;
-                    answer.NegVote= true;
-                    answer.PosVote = false;
+                    AnswerVote answerVote = new AnswerVote();
+                    if (answerVote.NegativeVote == false)
+                    {
+                        answer.Vote -= 1;
+                        answerVote.PositiveVote = false;
+                        answerVote.NegativeVote = true;
+                        answerVote.AnswerId = id;
+                        answerVote.QuestionId = answer.QuestionId;
+                        answerVote.ClientId = Client.Id;
+                    }
+                    else
+                    {
+                        return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
+                    }
+
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        session.Update(answer);
+                        session.Save(answerVote);
+                        transaction.Commit();
+                        return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
+                    }
                 }
                 else
                 {
-                    return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
+                    if (av.NegativeVote == false)
+                    {
+                        answer.Vote -= 1;
+                        av.PositiveVote = false;
+                        av.NegativeVote = true;
+                        av.AnswerId = id;
+                        av.QuestionId = answer.QuestionId;
+                        av.ClientId = Client.Id;
+                    }
+                    else
+                    {
+                        return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
+                    }
+
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        session.Update(answer);
+                        session.Update(av);
+                        transaction.Commit();
+                        return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
+                    }
                 }
-               
-                using (ITransaction transaction = session.BeginTransaction())
-                {
-                    session.Update(answer);
-                    transaction.Commit();
-                    return RedirectToAction("QuestionDetails", "Question", new { id = answer.QuestionId });
-                }
+
             }
 
         }
+
+
+        [HttpPost]
+        public ActionResult QVoteUp(long id)
+        {
+            using (ISession session = NHibernateSession.OpenSession())
+            {
+                session.Clear();
+                var email = User.Identity.Name;
+                var question = session.Get<Question>(id);
+                var Client = session.Query<Client>().FirstOrDefault(u => u.Email == email);
+                var qv = session.Query<QuestionVote>().FirstOrDefault(u => u.ClientId == Client.Id && u.QuestionId==id);
+                if (qv == null )
+                {
+                    QuestionVote questionVote = new QuestionVote();
+                    if (questionVote.PosVote ==false )
+                    {
+                        question.QVote += 1;
+                        questionVote.PosVote = true;
+                        questionVote.NegVote = false;
+                        questionVote.QuestionId = id;
+                        questionVote.ClientId = Client.Id;
+                    }
+                    else
+                    {
+                        return RedirectToAction("QuestionDetails", "Question", new { id = question.Id });
+                    }
+
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        session.Update(question);
+                        session.Save(questionVote);
+                        transaction.Commit();
+                        return RedirectToAction("QuestionDetails", "Question", new { id = question.Id });
+                    }
+                }
+                else
+                {
+                    if (qv.PosVote == false)
+                    {
+                        question.QVote += 1;
+                        qv.PosVote = true;
+                        qv.NegVote = false;
+                        qv.QuestionId = id;
+                        qv.ClientId = Client.Id;
+                    }
+                    else
+                    {
+                        return RedirectToAction("QuestionDetails", "Question", new { id = question.Id });
+                    }
+
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        session.Update(question);
+                        session.Update(qv);
+                        transaction.Commit();
+                        return RedirectToAction("QuestionDetails", "Question", new { id = question.Id });
+                    }
+                }
+
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult QVoteDown(long id)
+        {
+            using (ISession session = NHibernateSession.OpenSession())
+            {
+                session.Clear();
+                var email = User.Identity.Name;
+                var question = session.Get<Question>(id);
+                var Client = session.Query<Client>().FirstOrDefault(u => u.Email == email);
+                var qv= session.Query<QuestionVote>().FirstOrDefault(u => u.ClientId == Client.Id && u.QuestionId == id);
+                if (qv == null)
+                {
+                    QuestionVote questionVote = new QuestionVote();
+                    if (questionVote.NegVote == false)
+                    {
+                        question.QVote -= 1;
+                        questionVote.PosVote = false;
+                        questionVote.NegVote = true;
+                        questionVote.QuestionId = id;
+                        questionVote.ClientId = Client.Id;
+                    }
+                    else
+                    {
+                        return RedirectToAction("QuestionDetails", "Question", new { id = question.Id });
+                    }
+
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        session.Update(question);
+                        session.Save(questionVote);
+                        transaction.Commit();
+                        return RedirectToAction("QuestionDetails", "Question", new { id = question.Id });
+                    }
+                }
+                else
+                {
+                    if (qv.NegVote == false)
+                    {
+                        question.QVote -= 1;
+                        qv.PosVote = false;
+                        qv.NegVote = true;
+                        qv.QuestionId = id;
+                        qv.ClientId = Client.Id;
+                    }
+                    else
+                    {
+                        return RedirectToAction("QuestionDetails", "Question", new { id = question.Id });
+                    }
+
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        session.Update(question);
+                        session.Update(qv);
+                        transaction.Commit();
+                        return RedirectToAction("QuestionDetails", "Question", new { id = question.Id });
+                    }
+                }
+                
+            }
+
+        }
+
     }
 }

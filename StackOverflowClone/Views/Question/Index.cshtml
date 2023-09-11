@@ -15,16 +15,16 @@
 
 @foreach (var item in Model.Questions)
 {
-    <div style="display:block;border:1px solid #000;margin-bottom:5px; background-color:#fbf3d5">
-        <div class="row p-0">
-            <div class="col-md-1">
+    <div style="display:block;border:1px solid #000;margin-bottom:5px; background-color:#fff">
+        <div class="row">
+            <div class="col-2 p-2">
                 <ul style="list-style-type: none;text-align:right">
-                    <li>votes</li>
-                    <li>answer</li>
-                    <li>views</li>
+                    <li class="p-1">@item.QVote votes</li>
+                    <li class="p-1" style="border:1px solid #000">@item.Answer answers</li>
+                    <li class="p-1">@item.Views views</li>
                 </ul>
             </div>
-            <div class="col-md-10" style="border-left:1px solid #000">
+            <div class="col-10 p-4" style="border-left:1px solid #000">
                 <div> @Html.ActionLink(item.Title, "QuestionDetails", "Question", new { id = item.Id }, new { @class = "text-primary text-decoration-none text-left" })</div>
                 <div class="row pb-0 pt-4">
                     <div class="col-md-5">

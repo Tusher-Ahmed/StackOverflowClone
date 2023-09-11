@@ -84,6 +84,5 @@ namespace StackOverflowClone.Controllers
             return RedirectToAction("Index","Question");
         }
 
-        
     }
 }

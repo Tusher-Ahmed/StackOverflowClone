@@ -1,22 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" auto-import="true" assembly="StackOverflowClone" namespace="StackOverflowClone.Models">
-  <class name="Question" table="Question" dynamic-update="true" >
+  <class name="AnswerVote" table="AnswerVote" dynamic-update="true" >
     <cache usage="read-write"/>
     <id name="Id" column="Id" type="long">
       <generator class="native" />
     </id>
 
-    <property name="Title" />
-    <property name="Body" />
-    <property name="ExpectResult" />
-    <property name="Tags" />
-    <property name="QVote" />
-    <property name="Answer" />
-    <property name="Views" />
+    <property name="PositiveVote" />
+    <property name="NegativeVote" />
+    <property name="AnswerId" />
+    <property name="QuestionId" />
     <property name="ClientId" />
-    <property name="CreatedAt" />
-    <property name="Approve" />
 
   </class>
 </hibernate-mapping>
-

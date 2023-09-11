@@ -8,6 +8,7 @@
 {
     <div class="login-container">
         <h2>Log in to Your Account</h2>
+        <hr/>
         @Html.ValidationSummary("", new {@class="text-danger"})
         <div class="form-group">
             @Html.LabelFor(m => m.Email)
@@ -19,8 +20,9 @@
             @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
           
         </div>
+        <br/>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Log In</button>
+            <button type="submit" class="btn btn-outline-primary">Log In</button>
         </div>
         <div>
             Don’t have an account? 

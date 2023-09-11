@@ -21,6 +21,9 @@ namespace StackOverflowClone.Models
         [Required]
         public virtual string Tags { get; set; }
         public virtual long ClientId { get; set; }    
+        public virtual long QVote { get; set; }      
+        public virtual long Answer { get; set; }    
+        public virtual long Views { get; set; }    
         public virtual DateTime CreatedAt { get; set; }
         public virtual bool Approve { get; set; }
         
