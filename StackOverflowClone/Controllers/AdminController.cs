@@ -8,7 +8,8 @@ using System.Web.Mvc;
 
 namespace StackOverflowClone.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
+   // [AllowAnonymous]
     public class AdminController : Controller
     {
         // GET: Admin
@@ -173,6 +174,105 @@ namespace StackOverflowClone.Controllers
             catch (Exception e)
             {
                 ModelState.AddModelError("", e.Message);
+                return View();
+            }
+        }
+
+        public ActionResult RoleProvider()
+        {
+            using (ISession session = NHibernateSession.OpenSession())
+            {
+                var roles = session.Query<UserRoles>().Where(u => u.Role != "Admin").ToList();
+                return View(roles);
+            }
+        }
+        public ActionResult RoleProviderEdit(long id)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("RoleProvider", "Admin");
+            }
+            UserRoles userRoles=new UserRoles();
+            using (ISession session = NHibernateSession.OpenSession())
+            {
+                userRoles = session.Query<UserRoles>().Where(b => b.Id == id).FirstOrDefault();
+            }
+
+
+            return View(userRoles);
+
+        }
+        [HttpPost]
+        public ActionResult RoleProviderEdit(long id,UserRoles ur)
+        {
+            try
+            {
+                using (ISession session = NHibernateSession.OpenSession())
+                {
+                    session.Clear();
+                    var userRoles = session.Get<UserRoles>(id);
+                    userRoles.Role =ur.Role ;
+
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        session.Update(userRoles);
+                        transaction.Commit();
+                    }
+                }
+                return RedirectToAction("RoleProvider", "Admin");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View();
+            }
+        }
+        public ActionResult RoleProviderAdmin()
+        {
+            using (ISession session = NHibernateSession.OpenSession())
+            {
+                var roles = session.Query<UserRoles>().Where(u => u.Role == "Admin").ToList();
+                return View(roles);
+            }
+        }
+        public ActionResult RoleProviderAdminEdit(long id)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("RoleProviderAdmin", "Admin");
+            }
+            UserRoles userRoles = new UserRoles();
+            using (ISession session = NHibernateSession.OpenSession())
+            {
+                userRoles = session.Query<UserRoles>().Where(b => b.Id == id).FirstOrDefault();
+            }
+
+
+            return View(userRoles);
+
+        }
+        [HttpPost]
+        public ActionResult RoleProviderAdminEdit(long id, UserRoles ur)
+        {
+            try
+            {
+                using (ISession session = NHibernateSession.OpenSession())
+                {
+                    session.Clear();
+                    var userRoles = session.Get<UserRoles>(id);
+                    userRoles.Role = ur.Role;
+
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        session.Update(userRoles);
+                        transaction.Commit();
+                    }
+                }
+                return RedirectToAction("RoleProviderAdmin", "Admin");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }

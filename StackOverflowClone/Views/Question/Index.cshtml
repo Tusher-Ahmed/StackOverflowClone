@@ -40,13 +40,13 @@
                     <div class="col-md-7 text-end">
                         <span class="text-primary" style="font-size:10px; padding-right:5px;">@Model.MapedQC[item.Id] </span>
                         @{
-                            TimeSpan timeDifference = DateTime.Now - item.CreatedAt;
+            TimeSpan timeDifference = DateTime.Now - item.CreatedAt;
 
-                            int daysDifference = (int)timeDifference.TotalDays;
-                            <span style="font-size:10px;color:#000">
-                                Asked @daysDifference day's ago
-                            </span>
-                        }
+            int daysDifference = (int)timeDifference.TotalDays;
+            <span style="font-size:10px;color:#000">
+                Asked @daysDifference day's ago
+            </span>
+        }
 
                     </div>
                 </div>

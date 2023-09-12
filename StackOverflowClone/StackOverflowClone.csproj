@@ -142,6 +142,7 @@
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\QuestionVote.cs" />
+    <Compile Include="Models\UserRoles.cs" />
     <Compile Include="Models\VM\QueWClient.cs" />
     <Compile Include="NHibernateSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -173,6 +174,7 @@
     <Content Include="Mappings\Client.hbm.xml" />
     <Content Include="Mappings\Question.hbm.xml" />
     <Content Include="Mappings\QuestionVote.hbm.xml" />
+    <Content Include="Mappings\UserRoles.hbm.xml" />
     <Content Include="Models\hibernate.cfg.xml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -218,6 +220,10 @@
     <Content Include="Views\Admin\ApprovedQuestionList.cshtml" />
     <Content Include="Views\Admin\Users.cshtml" />
     <Content Include="Views\Admin\DeleteUser.cshtml" />
+    <Content Include="Views\Admin\RoleProvider.cshtml" />
+    <Content Include="Views\Admin\RoleProviderAdmin.cshtml" />
+    <Content Include="Views\Admin\RoleProviderEdit.cshtml" />
+    <Content Include="Views\Admin\RoleProviderAdminEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

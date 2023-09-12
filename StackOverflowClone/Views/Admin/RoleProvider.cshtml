@@ -1,0 +1,29 @@
+﻿@model IEnumerable<StackOverflowClone.Models.UserRoles>
+@{
+    ViewBag.Title = "RoleProvider";
+}
+
+<h2>User Roles</h2>
+<table class="table table-hover table-bordered" >
+    <thead>
+        <tr>
+            <th>User Email</th>
+            <th>Role</th>
+            <th>#</th>
+        </tr>
+    </thead>
+    <tbody>
+       @foreach(var item in Model)
+            {
+           <tr>
+               <td>@item.Username</td>
+               <td>@item.Role</td>
+               <td>
+                   @Html.ActionLink("Edit", "RoleProviderEdit", "Admin", new { id = item.Id }, new { @class = "btn btn-outline-success" })
+               </td>
+           </tr>
+               
+            }
+    </tbody>
+</table>
+

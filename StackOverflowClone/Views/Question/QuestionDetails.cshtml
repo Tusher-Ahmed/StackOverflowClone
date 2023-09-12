@@ -12,9 +12,9 @@
             TimeSpan timeDifference = DateTime.Now - Model.Question.CreatedAt;
 
             int daysDifference = (int)timeDifference.TotalDays;
-            <small>Asked @daysDifference day's ago</small>
+            <small style="margin-right:20px">Asked @daysDifference day's ago</small>
         }
-
+        <small>Viewed @Model.Question.Views  times</small>
     </div>
     <div class="col-md-5 text-end">
         @Html.ActionLink("Ask Question", "AskQuestion", "Question", new { @class = "btn btn-primary" })
@@ -107,7 +107,7 @@ else
                 <textarea class="form-control" rows="5" cols="10" name="CommentText" placeholder="Write your comment here" required></textarea>
             </div>
             <br/>
-            <input type="submit" value="Add Comment" class="btn btn-outline-primary" />
+            <input type="submit" value="Add Your Answer" class="btn btn-outline-primary" />
         </form>
     </div>
 </div>

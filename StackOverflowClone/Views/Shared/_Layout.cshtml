@@ -20,15 +20,50 @@
             </button>
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1 ">
-                 
+
                     @if (User.Identity.IsAuthenticated)
                     {
-                        @*<li>
-                            <a href="@Url.Action("Profile", "Question")" >
-                              <img src="~/Images/profile.jpg" alt="" class="pt-2" style="width:25px"/>
-                            </a>
-                        </li>*@
+
                         <li>@Html.ActionLink(@User.Identity.Name, "Profile", "Question", new { @class = "nav-link " })</li>
+
+                       if (Session["Role"].ToString() == "Admin")
+                       {
+                        <li class="nav-item dropdown ">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                Content Management
+                            </a>
+                            <ul class="dropdown-menu pt-1 pb-0 bg-dark">
+                                <li class="nav-item" style="border-bottom: 1px solid #fff; border-top: 1px solid #fff">
+                                    @Html.ActionLink("New Questions", "Index", "Admin", new { area = "" }, new { @class = "nav-link" })
+                                </li>
+                                <li class="nav-item" style="border-bottom:1px solid #fff">
+                                    @Html.ActionLink("Approved Questions", "ApprovedQuestionList", "Admin", new { area = "" }, new { @class = "nav-link " })
+                                </li>
+                                <li class="nav-item" style="border-bottom:1px solid #fff">
+                                    @Html.ActionLink("Users", "Users", "Admin", new { area = "" }, new { @class = "nav-link " })
+                                </li>
+                                <li class="nav-item" style="border-bottom: 1px solid #fff; border-top: 1px solid #fff">
+                                    @Html.ActionLink("User Roles", "RoleProvider", "Admin", new { area = "" }, new { @class = "nav-link" })
+                                </li>
+                                <li class="nav-item" style="border-bottom:1px solid #fff">
+                                    @Html.ActionLink("Admin Roles", "RoleProviderAdmin", "Admin", new { area = "" }, new { @class = "nav-link " })
+                                </li>
+                            </ul>
+                        </li>
+                        @*<li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Dropdown</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Separated link</a></li>
+                            </ul>
+                        </li>*@
+
+                       }
+
+
                         <li>@Html.ActionLink("Logout", "Logout", "Account", new { area = "" }, new { @class = "nav-link" })</li>
 
                     }
@@ -37,24 +72,6 @@
                         <li>@Html.ActionLink("Login", "Login", "Account", new { area = "" }, new { @class = "nav-link" })</li>
                         <li>@Html.ActionLink("SignUp", "SignUp", "Account", new { area = "" }, new { @class = "nav-link" })</li>
                     }
-                    @*<li>@Html.ActionLink("Questions", "Index", "Admin", new { area = "" }, new { @class = "nav-link" })</li>*@
-
-                    <li class="nav-item dropdown ">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            Content Management
-                        </a>
-                        <ul class="dropdown-menu pt-1 pb-0 bg-dark">
-                            <li class="nav-item" style="border-bottom: 1px solid #fff; border-top: 1px solid #fff">
-                                @Html.ActionLink("New Questions", "Index", "Admin", new { area = "" }, new { @class = "nav-link" })
-                            </li>
-                            <li class="nav-item" style="border-bottom:1px solid #fff">
-                                @Html.ActionLink("Approved Questions", "ApprovedQuestionList", "Admin", new { area = "" }, new { @class = "nav-link " })
-                            </li>
-                            <li class="nav-item" style="border-bottom:1px solid #fff">
-                                @Html.ActionLink("Users", "Users", "Admin", new { area = "" }, new { @class = "nav-link " })
-                            </li>
-                        </ul>
-                    </li>
 
                 </ul>
             </div>

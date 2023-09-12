@@ -25,10 +25,12 @@ namespace StackOverflowClone.Controllers
                 if(ModelState.IsValid)
                 {
                     var isValid = session.Query<Client>().Where(b => b.Email == client.Email && b.Password == client.Password).FirstOrDefault();
+                    var userRole = session.Query<UserRoles>().FirstOrDefault(u=>u.Username==isValid.Email);
                     ;
                     if (isValid != null) {
                         var name = isValid.Email;                       
                         FormsAuthentication.SetAuthCookie(name, false);
+                        Session["Role"] = userRole.Role;
                         return RedirectToAction("Index", "Question");
                     }
                     
@@ -52,8 +54,10 @@ namespace StackOverflowClone.Controllers
                 client.Email = cli.Email;
                 client.Password = cli.Password;
                 client.Username= cli.Username;
-                
-             
+                UserRoles roles = new UserRoles();
+                roles.Username = cli.Email;
+                roles.Role = "User";
+
                 using (ISession session = NHibernateSession.OpenSession())
                 {
                     var present= session.Query<Client>().Where(b => b.Email == client.Email).FirstOrDefault();
@@ -64,6 +68,7 @@ namespace StackOverflowClone.Controllers
                     }
                     using (ITransaction transaction = session.BeginTransaction())   
                     {
+                        session.Save(roles); 
                         session.Save(client); 
                         transaction.Commit();   
                     }
